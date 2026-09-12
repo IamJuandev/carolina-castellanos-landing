@@ -304,7 +304,7 @@ p {
 	color: var(--rust);
 }
 .map-card {
-	min-height: 900px;
+	min-height: 810px;
 	overflow: hidden;
 	background-color: var(--green-deep);
 	background-image: url("seccion_3v1.webp");
