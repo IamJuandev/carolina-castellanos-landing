@@ -444,6 +444,11 @@ p {
 	font-size: 1.55em;
 	line-height: 1.18;
 }
+.price-old {
+	text-decoration: line-through;
+	text-decoration-color: var(--rust);
+	text-decoration-thickness: 3px;
+}
 .whatsapp-icon {
 	width: 20px;
 	height: 20px;
