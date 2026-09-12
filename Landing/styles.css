@@ -65,6 +65,31 @@ summary:focus-visible {
 	font-weight: 800;
 	letter-spacing: 0.32em;
 }
+.countdown {
+	display: flex;
+	gap: 8px;
+	align-items: baseline;
+	margin-left: auto;
+	color: var(--ink);
+	font-size: 0.72rem;
+	font-weight: 700;
+	white-space: nowrap;
+}
+.countdown-label {
+	color: var(--rust);
+	font-size: 0.66rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+.countdown-unit strong {
+	font-family: Fraunces, Georgia, serif;
+	font-size: 1.05rem;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: -0.02em;
+}
+.countdown.is-live .countdown-unit {
+	display: none;
+}
 
 .card {
 	margin: 10px 0;
