@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Acceso | Cronograma</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/admin.css" />
+  </head>
+  <body>
+    <main class="admin-shell admin-shell-center">
+      <section class="card light-card admin-card login-card">
+        <p class="section-kicker">Área privada</p>
+        <h1>Cronograma</h1>
+        <p>Ingresa la contraseña para editar los datos del taller.</p>
+        <p class="admin-errors">{{errors}}</p>
+        <form class="admin-form" method="post" action="/cronograma/login">
+          <label>Contraseña <input type="password" name="password" autocomplete="current-password" autofocus required /></label>
+          <button class="button button-dark" type="submit">Entrar</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

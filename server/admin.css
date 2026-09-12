@@ -1,0 +1,122 @@
+.admin-shell {
+	width: min(100%, 640px);
+	margin: auto;
+	padding: 24px 16px 48px;
+}
+.admin-card h1 {
+	font-size: clamp(2rem, 6vw, 2.8rem);
+	margin-bottom: 6px;
+}
+.admin-card > p {
+	margin: 0 0 22px;
+	color: var(--muted);
+}
+.admin-form {
+	display: grid;
+	gap: 18px;
+}
+.admin-form fieldset {
+	display: grid;
+	gap: 12px;
+	margin: 0;
+	padding: 16px;
+	border: 1px solid var(--line);
+	border-radius: 15px;
+	background: rgba(255, 255, 255, 0.72);
+}
+.admin-form legend {
+	padding: 0 6px;
+	color: var(--rust);
+	font-size: 0.7rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+.admin-form label {
+	display: grid;
+	gap: 6px;
+	font-size: 0.85rem;
+	font-weight: 700;
+}
+.admin-form input {
+	min-height: 44px;
+	padding: 0 12px;
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	background: #fff;
+	color: var(--ink);
+	font: inherit;
+	font-weight: 500;
+}
+.admin-form input:focus-visible {
+	outline: 3px solid var(--rust);
+	outline-offset: 2px;
+}
+.admin-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+.admin-hint {
+	margin: 0;
+	color: var(--muted);
+	font-size: 0.8rem;
+}
+.admin-notice,
+.admin-errors {
+	margin: 0;
+	padding: 12px 14px;
+	border-radius: 10px;
+	font-size: 0.9rem;
+	font-weight: 700;
+}
+.admin-notice {
+	color: var(--green);
+	background: rgba(0, 70, 59, 0.1);
+}
+.admin-errors {
+	color: var(--rust);
+	background: rgba(191, 76, 56, 0.1);
+}
+.admin-notice:empty,
+.admin-errors:empty {
+	display: none;
+}
+.admin-form .button {
+	border: 0;
+	cursor: pointer;
+	justify-self: start;
+}
+.admin-shell-center {
+	min-height: 100vh;
+	display: grid;
+	place-items: center;
+}
+.login-card {
+	width: min(100%, 420px);
+}
+.login-card h1 {
+	margin-bottom: 6px;
+}
+.admin-topline {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 14px;
+}
+.admin-topline form {
+	margin: 0;
+}
+.admin-logout {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--muted);
+	font: inherit;
+	font-size: 0.85rem;
+	font-weight: 700;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	cursor: pointer;
+}

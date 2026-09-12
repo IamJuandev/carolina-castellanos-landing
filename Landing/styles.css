@@ -60,12 +60,6 @@ summary:focus-visible {
 	background: rgba(244, 238, 229, 0.94);
 	backdrop-filter: blur(12px);
 }
-.logo,
-.footer-logo {
-	font-size: 0.86rem;
-	font-weight: 800;
-	letter-spacing: 0.32em;
-}
 .countdown {
 	display: flex;
 	gap: 8px;
@@ -121,10 +115,36 @@ summary:focus-visible {
 	text-transform: uppercase;
 }
 .pill {
+	gap: 8px;
+	align-items: center;
 	padding: 8px 12px;
 	border: 1px solid rgba(191, 76, 56, 0.36);
 	border-radius: 999px;
 	background: rgba(255, 255, 255, 0.66);
+}
+.live-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--rust);
+	box-shadow: 0 0 0 0 rgba(191, 76, 56, 0.5);
+	animation: live-pulse 1.6s ease-out infinite;
+}
+@keyframes live-pulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(191, 76, 56, 0.55);
+	}
+	70% {
+		box-shadow: 0 0 0 7px rgba(191, 76, 56, 0);
+	}
+	100% {
+		box-shadow: 0 0 0 0 rgba(191, 76, 56, 0);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.live-dot {
+		animation: none;
+	}
 }
 h1,
 h2 {
@@ -160,18 +180,12 @@ p {
 			rgba(255, 250, 244, 0.76) 48%,
 			rgba(255, 250, 244, 0.08) 70%
 		),
-		url("Fondo Carolina.png") center 48% / cover no-repeat;
+		url("Fondo Carolina.png") center top / auto 125% no-repeat;
 }
 .hero-content {
 	position: relative;
 	z-index: 1;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
 	max-width: 520px;
-}
-.hero-content .button {
-	margin-top: auto;
 }
 .hero-text {
 	max-width: 350px;
@@ -232,7 +246,7 @@ p {
 			rgba(0, 31, 27, 0.3) 45%,
 			rgba(0, 31, 27, 0.9) 100%
 		),
-		url("segunda_seccion.png") center center / cover no-repeat;
+		url("segunda_seccion.png") center 78% / cover no-repeat;
 }
 .image-statement-content {
 	position: relative;
@@ -682,12 +696,8 @@ p {
 	text-align: center;
 	background: var(--paper);
 }
-.footer-logo {
-	margin: 0;
-	font-size: 1rem;
-}
 .final-footer > p:last-child {
-	margin: 14px 0 0;
+	margin: 0;
 	color: var(--muted);
 	font-size: 0.82rem;
 	font-weight: 600;
@@ -716,7 +726,15 @@ p {
 	}
 	.hero-card {
 		min-height: 680px;
-		background-position: center 41%;
+		align-items: center;
+		background:
+			linear-gradient(
+				90deg,
+				#f0e7d9 0 57%,
+				rgba(240, 231, 217, 0.75) 63%,
+				rgba(240, 231, 217, 0) 76%
+			),
+			#f0e7d9 url("Fondo Carolina.png") right 28% / auto 140% no-repeat;
 	}
 	.hero-content {
 		max-width: 52%;
