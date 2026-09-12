@@ -1,25 +1,3 @@
-const menuButton = document.querySelector(".menu-button");
-const siteMenu = document.querySelector(".site-menu");
-const menuLinks = Array.from(document.querySelectorAll(".site-menu a"));
-
-function closeMenu() {
-	if (!menuButton || !siteMenu) return;
-	menuButton.setAttribute("aria-expanded", "false");
-	menuButton.setAttribute("aria-label", "Abrir menú");
-	siteMenu.classList.remove("is-open");
-}
-
-menuButton?.addEventListener("click", () => {
-	const isOpen = menuButton.getAttribute("aria-expanded") === "true";
-	menuButton.setAttribute("aria-expanded", String(!isOpen));
-	menuButton.setAttribute("aria-label", isOpen ? "Abrir menú" : "Cerrar menú");
-	siteMenu?.classList.toggle("is-open", !isOpen);
-});
-menuLinks.forEach((link) => link.addEventListener("click", closeMenu));
-document.addEventListener("keydown", (event) => {
-	if (event.key === "Escape") closeMenu();
-});
-
 const track = document.querySelector("[data-carousel-track]");
 const slides = Array.from(document.querySelectorAll(".testimonial-slide"));
 const dots = Array.from(document.querySelectorAll("[data-carousel-dot]"));
