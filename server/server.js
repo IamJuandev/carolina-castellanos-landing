@@ -39,6 +39,7 @@ const landingTemplate = readFileSync(join(LANDING_DIR, "index.html"), "utf8");
 const adminTemplate = readFileSync(join(__dirname, "cronograma.html"), "utf8");
 const loginTemplate = readFileSync(join(__dirname, "login.html"), "utf8");
 const adminCss = readFileSync(join(__dirname, "admin.css"), "utf8");
+const kinderPage = readFileSync(join(__dirname, "kinder.html"), "utf8");
 
 const dateFormatter = new Intl.DateTimeFormat("es-CO", {
 	day: "numeric",
@@ -207,6 +208,10 @@ app.get("/", (_req, res) => {
 });
 
 app.use(UPLOADS_URL, express.static(UPLOADS_DIR, { maxAge: "7d", immutable: true }));
+
+app.get("/kinder", (_req, res) => {
+	res.type("html").send(kinderPage);
+});
 
 app.get("/admin.css", (_req, res) => {
 	res.type("css").send(adminCss);
