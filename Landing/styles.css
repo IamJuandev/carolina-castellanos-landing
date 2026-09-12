@@ -307,7 +307,7 @@ p {
 	min-height: 720px;
 	overflow: hidden;
 	background-color: var(--green-deep);
-	background-image: url("SECCION_3.jpg");
+	background-image: url("seccion_3v1.png");
 	background-position: center bottom;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -763,7 +763,7 @@ p {
 				rgba(0, 55, 47, 0.2) 70%,
 				transparent 84%
 			),
-			url("SECCION_3.jpg");
+			url("seccion_3v1.png");
 		background-position:
 			center,
 			right center;
