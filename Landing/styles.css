@@ -605,6 +605,12 @@ p {
 		100% 1.8px,
 		0 0;
 }
+.faq-link {
+	color: var(--rust);
+	font-weight: 700;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
 .faq-card details p {
 	max-width: 580px;
 	margin: 12px 0 0;
