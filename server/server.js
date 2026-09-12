@@ -39,7 +39,7 @@ const landingTemplate = readFileSync(join(LANDING_DIR, "index.html"), "utf8");
 const adminTemplate = readFileSync(join(__dirname, "cronograma.html"), "utf8");
 const loginTemplate = readFileSync(join(__dirname, "login.html"), "utf8");
 const adminCss = readFileSync(join(__dirname, "admin.css"), "utf8");
-const kinderPage = readFileSync(join(__dirname, "kinder.html"), "utf8");
+const comingSoonTemplate = readFileSync(join(__dirname, "coming-soon.html"), "utf8");
 
 const dateFormatter = new Intl.DateTimeFormat("es-CO", {
 	day: "numeric",
@@ -174,6 +174,13 @@ const app = express();
 app.disable("x-powered-by");
 app.set("trust proxy", 1);
 app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+	// Relative asset URLs in the landing assume no trailing slash.
+	if (req.path.length > 1 && req.path.endsWith("/")) {
+		return res.redirect(301, req.path.slice(0, -1));
+	}
+	next();
+});
 
 mkdirSync(join(UPLOADS_DIR, "testimonios"), { recursive: true });
 const upload = multer({
@@ -196,7 +203,21 @@ function renderAdmin(res, status, values) {
 	);
 }
 
+const BACK_HOME_CTA =
+	'        <a class="button button-outline" href="/">Volver al inicio <svg class="icon button-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>';
+
 app.get("/", (_req, res) => {
+	res.type("html").send(
+		render(comingSoonTemplate, {
+			title: "Muy pronto",
+			kicker: "Carolina Castellanos",
+			headline: "Estamos construyendo este sitio",
+			cta: "",
+		}),
+	);
+});
+
+app.get("/eneagrama", (_req, res) => {
 	const settings = getSettings();
 	res.type("html").send(
 		render(landingTemplate, {
@@ -210,7 +231,14 @@ app.get("/", (_req, res) => {
 app.use(UPLOADS_URL, express.static(UPLOADS_DIR, { maxAge: "7d", immutable: true }));
 
 app.get("/kinder", (_req, res) => {
-	res.type("html").send(kinderPage);
+	res.type("html").send(
+		render(comingSoonTemplate, {
+			title: "Kinder",
+			kicker: "Kinder",
+			headline: "Estamos construyendo este apartado",
+			cta: BACK_HOME_CTA,
+		}),
+	);
 });
 
 app.get("/admin.css", (_req, res) => {
