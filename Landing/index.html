@@ -19,7 +19,7 @@
   <body>
     <main class="landing-shell">
         <header class="topbar">
-          <div class="countdown" data-countdown="2026-10-12T00:00:00-05:00" role="timer" aria-live="off">
+          <div class="countdown" data-countdown="{{countdown_iso}}" role="timer" aria-live="off">
             <span class="countdown-label">Inicia en</span>
             <span class="countdown-unit"><strong data-countdown-days>--</strong>d</span>
             <span class="countdown-unit"><strong data-countdown-hours>--</strong>h</span>
@@ -138,11 +138,11 @@
       <section class="card light-card how-card">
         <p class="section-kicker">¿Cómo funciona?</p>
         <div class="steps">
-<article><svg class="icon how-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20v-1a5 5 0 0 1 9-3M12 16a5 5 0 0 1 9 3v1"/></svg><p><strong>8 sesiones grupales</strong><br />en vivo conmigo</p></article>
-          <article><svg class="icon how-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="7" r="3.5"/><path d="M5.5 20v-1.5a6.5 6.5 0 0 1 13 0V20"/></svg><p><strong>2 sesiones</strong><br />personalizadas</p></article>
-          <article><svg class="icon how-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4m8-4v4m-8 7h.01M12 14h.01M16 14h.01m-8 3h.01M12 17h.01M16 17h.01"/></svg><p><strong>Inicio:</strong><br />12 de octubre</p></article>
-          <article><svg class="icon how-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg><p><strong>Horario:</strong><br />7:00 p. m. Bogotá</p></article>
-          <article><svg class="icon how-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3h12M6 21h12M7.5 3c0 4 3 4.5 4.5 9s-4.5 5-4.5 9M16.5 3c0 4-3 4.5-4.5 9s4.5 5 4.5 9M9 17h6"/></svg><p><strong>Duración:</strong><br />1 hora por sesión</p></article>
+<article><svg class="icon how-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20v-1a5 5 0 0 1 9-3M12 16a5 5 0 0 1 9 3v1"/></svg><p><strong>{{group_title}}</strong><br />{{group_sub}}</p></article>
+          <article><svg class="icon how-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="7" r="3.5"/><path d="M5.5 20v-1.5a6.5 6.5 0 0 1 13 0V20"/></svg><p><strong>{{individual_title}}</strong><br />{{individual_sub}}</p></article>
+          <article><svg class="icon how-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4m8-4v4m-8 7h.01M12 14h.01M16 14h.01m-8 3h.01M12 17h.01M16 17h.01"/></svg><p><strong>Inicio:</strong><br />{{start_label}}</p></article>
+          <article><svg class="icon how-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg><p><strong>Horario:</strong><br />{{time_label}}</p></article>
+          <article><svg class="icon how-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3h12M6 21h12M7.5 3c0 4 3 4.5 4.5 9s-4.5 5-4.5 9M16.5 3c0 4-3 4.5-4.5 9s4.5 5 4.5 9M9 17h6"/></svg><p><strong>Duración:</strong><br />{{duration_label}}</p></article>
         </div>
         <div class="plan-box"><svg class="icon plan-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 3C10 3 4 7 4 13a7 7 0 0 0 7 7c6 0 9-7 9-17Z" /><path d="M3 22 16 9M8 17v-6m0 6h6" /></svg><span>Con base a tu situación, crearemos juntos un plan de acción personalizado para que puedas mejorar en tu caso puntual.</span></div>
       </section>

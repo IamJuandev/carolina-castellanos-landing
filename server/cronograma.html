@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Cronograma | Administración</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .admin-shell {
+        width: min(100%, 640px);
+        margin: auto;
+        padding: 24px 16px 48px;
+      }
+      .admin-card h1 {
+        font-size: clamp(2rem, 6vw, 2.8rem);
+        margin-bottom: 6px;
+      }
+      .admin-card > p {
+        margin: 0 0 22px;
+        color: var(--muted);
+      }
+      .admin-form {
+        display: grid;
+        gap: 18px;
+      }
+      .admin-form fieldset {
+        display: grid;
+        gap: 12px;
+        margin: 0;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.72);
+      }
+      .admin-form legend {
+        padding: 0 6px;
+        color: var(--rust);
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .admin-form label {
+        display: grid;
+        gap: 6px;
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
+      .admin-form input {
+        min-height: 44px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        color: var(--ink);
+        font: inherit;
+        font-weight: 500;
+      }
+      .admin-form input:focus-visible {
+        outline: 3px solid var(--rust);
+        outline-offset: 2px;
+      }
+      .admin-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .admin-hint {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+      .admin-notice,
+      .admin-errors {
+        margin: 0;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+      .admin-notice {
+        color: var(--green);
+        background: rgba(0, 70, 59, 0.1);
+      }
+      .admin-errors {
+        color: var(--rust);
+        background: rgba(191, 76, 56, 0.1);
+      }
+      .admin-notice:empty,
+      .admin-errors:empty {
+        display: none;
+      }
+      .admin-form .button {
+        border: 0;
+        cursor: pointer;
+        justify-self: start;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="admin-shell">
+      <section class="card light-card admin-card">
+        <h1>Cronograma</h1>
+        <p>Estos datos se muestran en la sección "¿Cómo funciona?" y alimentan el contador de la landing.</p>
+        <p class="admin-notice">{{notice}}</p>
+        <p class="admin-errors">{{errors}}</p>
+        <form class="admin-form" method="post" action="/cronograma">
+          <fieldset>
+            <legend>Sesiones grupales</legend>
+            <label>Título <input name="group_title" value="{{group_title}}" required /></label>
+            <label>Subtítulo <input name="group_sub" value="{{group_sub}}" required /></label>
+          </fieldset>
+          <fieldset>
+            <legend>Sesiones personalizadas</legend>
+            <label>Título <input name="individual_title" value="{{individual_title}}" required /></label>
+            <label>Subtítulo <input name="individual_sub" value="{{individual_sub}}" required /></label>
+          </fieldset>
+          <fieldset>
+            <legend>Inicio y horario</legend>
+            <div class="admin-row">
+              <label>Fecha de inicio <input type="date" name="start_date" value="{{start_date}}" required /></label>
+              <label>Hora (Bogotá) <input type="time" name="start_time" value="{{start_time}}" required /></label>
+            </div>
+            <p class="admin-hint">Se mostrará como "{{start_label}}" y "{{time_label}}". El contador cuenta hasta ese momento.</p>
+          </fieldset>
+          <fieldset>
+            <legend>Duración</legend>
+            <label>Texto <input name="duration_label" value="{{duration_label}}" required /></label>
+          </fieldset>
+          <button class="button button-dark" type="submit">Guardar cambios</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
