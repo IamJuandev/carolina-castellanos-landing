@@ -691,17 +691,6 @@ p {
 	height: 24px;
 	flex: 0 0 24px;
 }
-.final-footer {
-	padding: 34px 20px 38px;
-	text-align: center;
-	background: var(--paper);
-}
-.final-footer > p:last-child {
-	margin: 0;
-	color: var(--muted);
-	font-size: 0.82rem;
-	font-weight: 600;
-}
 
 @media (min-width: 720px) {
 	.final-card {
