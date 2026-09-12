@@ -120,3 +120,53 @@
 	text-underline-offset: 3px;
 	cursor: pointer;
 }
+.admin-subtitle {
+	font-size: clamp(1.6rem, 5vw, 2.2rem);
+	margin-bottom: 6px;
+}
+.admin-testimonials {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 12px;
+	margin: 0 0 22px;
+	padding: 0;
+	list-style: none;
+}
+.admin-testimonial {
+	display: grid;
+	gap: 8px;
+	padding: 10px;
+	border: 1px solid var(--line);
+	border-radius: 14px;
+	background: rgba(255, 255, 255, 0.72);
+}
+.admin-testimonial img {
+	width: 100%;
+	aspect-ratio: 4 / 5;
+	object-fit: cover;
+	border-radius: 10px;
+}
+.admin-testimonial-meta {
+	display: grid;
+	gap: 6px;
+	font-size: 0.78rem;
+	color: var(--muted);
+}
+.admin-testimonial-meta form {
+	margin: 0;
+}
+.admin-danger {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--rust);
+	font: inherit;
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	cursor: pointer;
+}
+.admin-form input[type="file"] {
+	padding: 9px 12px;
+}

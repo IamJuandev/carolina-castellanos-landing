@@ -45,6 +45,23 @@
           <button class="button button-dark" type="submit">Guardar cambios</button>
         </form>
       </section>
+
+      <section class="card light-card admin-card" id="testimonios">
+        <p class="section-kicker">Testimonios</p>
+        <h2 class="admin-subtitle">Fotos del carrusel</h2>
+        <p>Cada imagen se convierte automáticamente a WebP y se ajusta a 1080 px de ancho.</p>
+        <ul class="admin-testimonials">
+{{{testimonials_admin}}}
+        </ul>
+        <form class="admin-form" method="post" action="/cronograma/testimonios" enctype="multipart/form-data">
+          <fieldset>
+            <legend>Agregar testimonio</legend>
+            <label>Imagen <input type="file" name="photo" accept="image/*" required /></label>
+            <label>Descripción (texto alternativo) <input name="alt" placeholder="Testimonio de Natalia sobre el eneagrama" required /></label>
+          </fieldset>
+          <button class="button button-dark" type="submit">Subir testimonio</button>
+        </form>
+      </section>
     </main>
   </body>
 </html>

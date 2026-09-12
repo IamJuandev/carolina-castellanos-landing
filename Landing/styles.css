@@ -180,7 +180,7 @@ p {
 			rgba(255, 250, 244, 0.76) 48%,
 			rgba(255, 250, 244, 0.08) 70%
 		),
-		url("Fondo Carolina.png") center top / auto 125% no-repeat;
+		url("Fondo Carolina.webp") center top / auto 125% no-repeat;
 }
 .hero-content {
 	position: relative;
@@ -246,7 +246,7 @@ p {
 			rgba(0, 31, 27, 0.3) 45%,
 			rgba(0, 31, 27, 0.9) 100%
 		),
-		url("segunda_seccion.png") center 78% / cover no-repeat;
+		url("segunda_seccion.webp") center 78% / cover no-repeat;
 }
 .image-statement-content {
 	position: relative;
@@ -307,7 +307,7 @@ p {
 	min-height: 720px;
 	overflow: hidden;
 	background-color: var(--green-deep);
-	background-image: url("seccion_3v1.png");
+	background-image: url("seccion_3v1.webp");
 	background-position: center bottom;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -399,7 +399,7 @@ p {
 }
 .process-card {
 	background:
-		var(--green-deep) url("seccion_6.jpeg") left bottom / cover no-repeat;
+		var(--green-deep) url("seccion_6.webp") left bottom / cover no-repeat;
 	padding-bottom: clamp(130px, 22vw, 200px);
 }
 .process-card ul {
@@ -426,7 +426,7 @@ p {
 	stroke-width: 2.4;
 }
 .price-card {
-	background: url("seccion_7.jpeg") center bottom / cover no-repeat;
+	background: url("seccion_7.webp") center bottom / cover no-repeat;
 }
 .price-card h2 {
 	color: #fff;
@@ -643,7 +643,7 @@ p {
 	isolation: isolate;
 	aspect-ratio: 927 / 1152;
 	padding: clamp(24px, 6vw, 42px);
-	background: url("ultima_seccion.jpeg") center center / cover no-repeat;
+	background: url("ultima_seccion.webp") center center / cover no-repeat;
 }
 .final-copy {
 	position: relative;
@@ -734,7 +734,7 @@ p {
 				rgba(240, 231, 217, 0.75) 63%,
 				rgba(240, 231, 217, 0) 76%
 			),
-			#f0e7d9 url("Fondo Carolina.png") right 28% / auto 140% no-repeat;
+			#f0e7d9 url("Fondo Carolina.webp") right 28% / auto 140% no-repeat;
 	}
 	.hero-content {
 		max-width: 52%;
@@ -763,7 +763,7 @@ p {
 				rgba(0, 55, 47, 0.2) 70%,
 				transparent 84%
 			),
-			url("seccion_3v1.png");
+			url("seccion_3v1.webp");
 		background-position:
 			center,
 			right center;

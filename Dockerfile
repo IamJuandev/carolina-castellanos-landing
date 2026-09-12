@@ -7,5 +7,6 @@ COPY Landing ./Landing
 COPY server ./server
 ENV PORT=3000
 ENV DATABASE_PATH=/app/data/cronograma.db
+ENV UPLOADS_DIR=/app/data/uploads
 EXPOSE 3000
 CMD ["node", "server/server.js"]
