@@ -88,11 +88,11 @@ video {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(100%, 430px);
-  min-height: 64px;
+  width: fit-content;
+  min-height: 50px;
   margin: clamp(26px, 5vw, 44px) auto clamp(18px, 4vw, 38px);
-  padding: 0 28px;
-  border: 2px solid rgba(255, 255, 255, 0.32);
+  padding: 0 22px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: 999px;
   color: white;
   background: var(--green);
@@ -100,6 +100,7 @@ video {
   font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.04em;
+  text-align: center;
   text-decoration: none;
   text-transform: uppercase;
   transition: background 180ms ease, transform 180ms ease;
