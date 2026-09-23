@@ -24,4 +24,4 @@ ask-on-risk
 - Start server and request `/heridadeabandono`.
 
 ## Progress
-Completed locally. Video optimized from 150.82 MB to 47.31 MB for GitHub delivery. HTTP runtime probe is pending outside this sandbox.
+Completed and deployed. Video optimized from 150.82 MB to 47.31 MB for GitHub delivery. Visual styling now matches the existing Carolina landing palette and typography.
