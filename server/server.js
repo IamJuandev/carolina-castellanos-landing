@@ -36,6 +36,7 @@ if (!ADMIN_PASSWORD) {
 }
 
 const landingTemplate = readFileSync(join(LANDING_DIR, "index.html"), "utf8");
+const abandonmentLandingTemplate = readFileSync(join(LANDING_DIR, "heridadeabandono", "index.html"), "utf8");
 const adminTemplate = readFileSync(join(__dirname, "cronograma.html"), "utf8");
 const loginTemplate = readFileSync(join(__dirname, "login.html"), "utf8");
 const adminCss = readFileSync(join(__dirname, "admin.css"), "utf8");
@@ -215,6 +216,12 @@ app.get("/", (_req, res) => {
 			cta: "",
 		}),
 	);
+});
+
+app.use("/heridadeabandono", express.static(join(LANDING_DIR, "heridadeabandono"), { index: false, redirect: false, maxAge: "7d" }));
+
+app.get("/heridadeabandono", (_req, res) => {
+	res.type("html").send(abandonmentLandingTemplate);
 });
 
 app.get("/eneagrama", (_req, res) => {
