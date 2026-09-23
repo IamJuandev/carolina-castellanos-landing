@@ -24,4 +24,4 @@ ask-on-risk
 - Start server and request `/heridadeabandono`.
 
 ## Progress
-Completed and deployed. Video optimized from 150.82 MB to 47.31 MB for GitHub delivery. Visual styling now matches the existing Carolina landing palette and typography.
+Completed and deployed. Video optimized from 150.82 MB to 47.31 MB for GitHub delivery. Visual styling now matches the existing Carolina landing palette and typography. CTA links internally to `/eneagrama` with centered text.
