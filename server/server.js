@@ -10,6 +10,9 @@ import {
 	getSettings,
 	saveSettings,
 	FIELDS,
+	getRelationshipSettings,
+	saveRelationshipSettings,
+	RELATIONSHIP_FIELDS,
 	getTestimonials,
 	getTestimonial,
 	addTestimonial,
@@ -38,6 +41,7 @@ if (!ADMIN_PASSWORD) {
 const landingTemplate = readFileSync(join(LANDING_DIR, "index.html"), "utf8");
 const abandonmentLandingTemplate = readFileSync(join(LANDING_DIR, "heridadeabandono", "index.html"), "utf8");
 const masculineEnergyLandingTemplate = readFileSync(join(LANDING_DIR, "energiamasculina", "index.html"), "utf8");
+const relationshipLandingTemplate = readFileSync(join(LANDING_DIR, "relacionesdepareja", "index.html"), "utf8");
 const adminTemplate = readFileSync(join(__dirname, "cronograma.html"), "utf8");
 const loginTemplate = readFileSync(join(__dirname, "login.html"), "utf8");
 const adminCss = readFileSync(join(__dirname, "admin.css"), "utf8");
@@ -158,7 +162,7 @@ function renderLogin(res, status, errors) {
 	res.status(status).type("html").send(render(loginTemplate, { errors }));
 }
 
-function validate(body) {
+function validate(body, fields = FIELDS) {
 	const errors = [];
 	if (!/^\d{4}-\d{2}-\d{2}$/.test(body.start_date ?? "")) {
 		errors.push("La fecha de inicio no es válida.");
@@ -166,10 +170,22 @@ function validate(body) {
 	if (!/^\d{2}:\d{2}$/.test(body.start_time ?? "")) {
 		errors.push("La hora de inicio no es válida.");
 	}
-	for (const key of FIELDS) {
+	for (const key of fields) {
 		if (!String(body[key] ?? "").trim()) errors.push(`El campo ${key} es obligatorio.`);
 	}
 	return errors;
+}
+
+function validateRelationship(body) {
+	const errors = validate(body, RELATIONSHIP_FIELDS);
+	if (body.whatsapp_url && !/^https:\/\/\S+$/.test(body.whatsapp_url.trim())) {
+		errors.push("El enlace de WhatsApp debe empezar por https://.");
+	}
+	return errors;
+}
+
+function prefixKeys(values, prefix) {
+	return Object.fromEntries(Object.entries(values).map(([key, value]) => [prefix + key, value]));
 }
 
 const app = express();
@@ -193,10 +209,14 @@ const upload = multer({
 
 function renderAdmin(res, status, values) {
 	const settings = getSettings();
+	const relationship = getRelationshipSettings();
 	res.status(status).type("html").send(
 		render(adminTemplate, {
 			...settings,
 			...deriveLabels(settings),
+			...prefixKeys({ ...relationship, ...deriveLabels(relationship) }, "rel_"),
+			rel_notice: "",
+			rel_errors: "",
 			testimonials_admin: renderAdminTestimonials(getTestimonials()),
 			notice: "",
 			errors: "",
@@ -229,6 +249,18 @@ app.use("/energiamasculina", express.static(join(LANDING_DIR, "energiamasculina"
 
 app.get("/energiamasculina", (_req, res) => {
 	res.type("html").send(masculineEnergyLandingTemplate);
+});
+
+app.use("/relacionesdepareja", express.static(join(LANDING_DIR, "relacionesdepareja"), { index: false, redirect: false, maxAge: "7d" }));
+
+app.get("/relacionesdepareja", (_req, res) => {
+	const settings = getRelationshipSettings();
+	res.type("html").send(
+		render(relationshipLandingTemplate, {
+			...settings,
+			...deriveLabels(settings),
+		}),
+	);
 });
 
 app.get("/eneagrama", (_req, res) => {
@@ -292,8 +324,28 @@ const NOTICES = {
 	testimonial_removed: "Testimonio eliminado.",
 };
 
+const RELATIONSHIP_NOTICES = {
+	relationship_saved: "Cambios guardados.",
+};
+
 app.get("/cronograma", requireAuth, (req, res) => {
-	renderAdmin(res, 200, { notice: NOTICES[req.query.ok] ?? "" });
+	renderAdmin(res, 200, {
+		notice: NOTICES[req.query.ok] ?? "",
+		rel_notice: RELATIONSHIP_NOTICES[req.query.ok] ?? "",
+	});
+});
+
+app.post("/cronograma/relaciones", requireAuth, (req, res) => {
+	const errors = validateRelationship(req.body);
+	if (errors.length) {
+		const draft = Object.fromEntries(RELATIONSHIP_FIELDS.map((key) => [key, req.body[key] ?? ""]));
+		return renderAdmin(res, 400, {
+			...prefixKeys({ ...draft, ...deriveLabels(draft) }, "rel_"),
+			rel_errors: errors.join(" "),
+		});
+	}
+	saveRelationshipSettings(req.body);
+	res.redirect(303, "/cronograma?ok=relationship_saved#relaciones");
 });
 
 app.post("/cronograma/testimonios", requireAuth, (req, res) => {

@@ -46,6 +46,51 @@
         </form>
       </section>
 
+      <section class="card light-card admin-card" id="relaciones">
+        <p class="section-kicker">Relaciones de pareja</p>
+        <h2 class="admin-subtitle">Taller de relaciones de pareja</h2>
+        <p>Estos datos se muestran en la inversión y en "¿Cómo funciona?" de <a class="faq-link" href="/relacionesdepareja" target="_blank" rel="noreferrer">/relacionesdepareja</a>.</p>
+        <p class="admin-notice">{{rel_notice}}</p>
+        <p class="admin-errors">{{rel_errors}}</p>
+        <form class="admin-form" method="post" action="/cronograma/relaciones">
+          <fieldset>
+            <legend>Sesiones grupales</legend>
+            <label>Título <input name="group_title" value="{{rel_group_title}}" required /></label>
+            <label>Subtítulo <input name="group_sub" value="{{rel_group_sub}}" required /></label>
+          </fieldset>
+          <fieldset>
+            <legend>Sesiones personalizadas</legend>
+            <label>Título <input name="individual_title" value="{{rel_individual_title}}" required /></label>
+            <label>Subtítulo <input name="individual_sub" value="{{rel_individual_sub}}" required /></label>
+          </fieldset>
+          <fieldset>
+            <legend>Inicio y horario</legend>
+            <div class="admin-row">
+              <label>Fecha de inicio <input type="date" name="start_date" value="{{rel_start_date}}" required /></label>
+              <label>Hora (Bogotá) <input type="time" name="start_time" value="{{rel_start_time}}" required /></label>
+            </div>
+            <p class="admin-hint">Se mostrará como "{{rel_start_label}}" y "{{rel_time_label}}".</p>
+          </fieldset>
+          <fieldset>
+            <legend>Duración</legend>
+            <label>Texto <input name="duration_label" value="{{rel_duration_label}}" required /></label>
+          </fieldset>
+          <fieldset>
+            <legend>Inversión</legend>
+            <label>Valor real (tachado) <input name="price_regular" value="{{rel_price_regular}}" required /></label>
+            <div class="admin-row">
+              <label>Precio en USD <input name="price_usd" value="{{rel_price_usd}}" required /></label>
+              <label>Precio en COP <input name="price_cop" value="{{rel_price_cop}}" required /></label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>WhatsApp</legend>
+            <label>Enlace de los botones <input type="url" name="whatsapp_url" value="{{rel_whatsapp_url}}" required /></label>
+          </fieldset>
+          <button class="button button-dark" type="submit">Guardar cambios</button>
+        </form>
+      </section>
+
       <section class="card light-card admin-card" id="testimonios">
         <p class="section-kicker">Testimonios</p>
         <h2 class="admin-subtitle">Fotos del carrusel</h2>

@@ -16,6 +16,24 @@ export const DEFAULTS = {
 
 export const FIELDS = Object.keys(DEFAULTS);
 
+// Stored in the same settings table under a "rel_" key prefix.
+export const RELATIONSHIP_DEFAULTS = {
+	group_title: "8 sesiones grupales",
+	group_sub: "en vivo conmigo",
+	individual_title: "2 sesiones",
+	individual_sub: "personalizadas",
+	start_date: "2027-01-11",
+	start_time: "19:00",
+	duration_label: "1 hora y media por sesión",
+	price_regular: "USD 899",
+	price_usd: "USD 480",
+	price_cop: "$1.450.000 COP",
+	whatsapp_url: "https://wa.link/c8r6ga",
+};
+
+export const RELATIONSHIP_FIELDS = Object.keys(RELATIONSHIP_DEFAULTS);
+const RELATIONSHIP_PREFIX = "rel_";
+
 mkdirSync(dirname(DB_PATH), { recursive: true });
 const db = new DatabaseSync(DB_PATH);
 db.exec(`
@@ -45,6 +63,9 @@ const seed = db.prepare(
 	"INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)",
 );
 for (const [key, value] of Object.entries(DEFAULTS)) seed.run(key, value);
+for (const [key, value] of Object.entries(RELATIONSHIP_DEFAULTS)) {
+	seed.run(RELATIONSHIP_PREFIX + key, value);
+}
 
 const testimonialCount = db.prepare("SELECT COUNT(*) AS n FROM testimonials").get().n;
 if (testimonialCount === 0) {
@@ -60,22 +81,41 @@ const upsert = db.prepare(`
 	ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at
 `);
 
-export function getSettings() {
-	const rows = selectAll.all();
-	const settings = { ...DEFAULTS };
-	for (const { key, value } of rows) if (key in DEFAULTS) settings[key] = value;
+function readGroup(defaults, prefix) {
+	const settings = { ...defaults };
+	for (const { key, value } of selectAll.all()) {
+		if (!key.startsWith(prefix)) continue;
+		const name = key.slice(prefix.length);
+		if (Object.hasOwn(defaults, name)) settings[name] = value;
+	}
 	return settings;
 }
 
-export function saveSettings(input) {
+function writeGroup(fields, prefix, input) {
 	db.exec("BEGIN");
 	try {
-		for (const key of FIELDS) upsert.run(key, String(input[key] ?? "").trim());
+		for (const key of fields) upsert.run(prefix + key, String(input[key] ?? "").trim());
 		db.exec("COMMIT");
 	} catch (error) {
 		db.exec("ROLLBACK");
 		throw error;
 	}
+}
+
+export function getSettings() {
+	return readGroup(DEFAULTS, "");
+}
+
+export function saveSettings(input) {
+	writeGroup(FIELDS, "", input);
+}
+
+export function getRelationshipSettings() {
+	return readGroup(RELATIONSHIP_DEFAULTS, RELATIONSHIP_PREFIX);
+}
+
+export function saveRelationshipSettings(input) {
+	writeGroup(RELATIONSHIP_FIELDS, RELATIONSHIP_PREFIX, input);
 }
 
 const selectTestimonials = db.prepare(
