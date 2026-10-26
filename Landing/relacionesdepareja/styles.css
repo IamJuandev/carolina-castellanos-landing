@@ -141,6 +141,31 @@ p {
 	justify-items: start;
 	padding: 30px 22px 0;
 }
+.countdown {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: baseline;
+	color: var(--ink);
+	font-size: 0.72rem;
+	font-weight: 700;
+	white-space: nowrap;
+}
+.countdown-label {
+	color: var(--wine);
+	font-size: 0.66rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+.countdown-unit strong {
+	font-family: Fraunces, Georgia, serif;
+	font-size: 1.05rem;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: -0.02em;
+}
+.countdown.is-live .countdown-unit {
+	display: none;
+}
 .eyebrow {
 	padding: 5px 12px;
 	border-radius: 999px;

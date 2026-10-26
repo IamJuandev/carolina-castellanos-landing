@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/relacionesdepareja/styles.css?v=1" />
+    <link rel="stylesheet" href="/relacionesdepareja/styles.css?v=2" />
   </head>
   <body>
     <svg width="0" height="0" class="sprite" aria-hidden="true" focusable="false">
@@ -34,6 +34,13 @@
     <main class="page">
       <section class="hero" aria-labelledby="page-title">
         <div class="hero-copy">
+          <div class="countdown" data-countdown="{{countdown_iso}}" role="timer" aria-live="off">
+            <span class="countdown-label">Inicia en</span>
+            <span class="countdown-unit"><strong data-countdown-days>--</strong>d</span>
+            <span class="countdown-unit"><strong data-countdown-hours>--</strong>h</span>
+            <span class="countdown-unit"><strong data-countdown-minutes>--</strong>m</span>
+            <span class="countdown-unit"><strong data-countdown-seconds>--</strong>s</span>
+          </div>
           <span class="eyebrow">Taller virtual de relaciones de pareja</span>
           <h1 id="page-title">Una excelente relación de pareja empieza por ti</h1>
           <p>Este proceso te ayuda a comprender cómo amas, reconocer lo que afecta tus relaciones y construir vínculos más conscientes, armónicos y satisfactorios.</p>
@@ -162,5 +169,6 @@
         </div>
       </section>
     </main>
+    <script src="/relacionesdepareja/script.js?v=1" defer></script>
   </body>
 </html>
