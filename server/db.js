@@ -34,6 +34,22 @@ export const RELATIONSHIP_DEFAULTS = {
 export const RELATIONSHIP_FIELDS = Object.keys(RELATIONSHIP_DEFAULTS);
 const RELATIONSHIP_PREFIX = "rel_";
 
+// Free class sign-up page (/formulario), stored under a "form_" key prefix.
+export const FORM_DEFAULTS = {
+	title: "Aprende a construir relaciones sanas",
+	subtitle:
+		"Descubre cómo nuestra personalidad, nuestros miedos y nuestras reacciones influyen en las relaciones que construimos.",
+	start_date: "2026-12-03",
+	start_time: "19:00",
+	speaker_name: "Carolina",
+	speaker_role: "Terapeuta",
+	speaker_photo: "/formulario/carolina.webp",
+	whatsapp_url: "https://wa.link/c8r6ga",
+};
+
+export const FORM_FIELDS = Object.keys(FORM_DEFAULTS);
+const FORM_PREFIX = "form_";
+
 mkdirSync(dirname(DB_PATH), { recursive: true });
 const db = new DatabaseSync(DB_PATH);
 db.exec(`
@@ -65,6 +81,9 @@ const seed = db.prepare(
 for (const [key, value] of Object.entries(DEFAULTS)) seed.run(key, value);
 for (const [key, value] of Object.entries(RELATIONSHIP_DEFAULTS)) {
 	seed.run(RELATIONSHIP_PREFIX + key, value);
+}
+for (const [key, value] of Object.entries(FORM_DEFAULTS)) {
+	seed.run(FORM_PREFIX + key, value);
 }
 
 const testimonialCount = db.prepare("SELECT COUNT(*) AS n FROM testimonials").get().n;
@@ -116,6 +135,14 @@ export function getRelationshipSettings() {
 
 export function saveRelationshipSettings(input) {
 	writeGroup(RELATIONSHIP_FIELDS, RELATIONSHIP_PREFIX, input);
+}
+
+export function getFormSettings() {
+	return readGroup(FORM_DEFAULTS, FORM_PREFIX);
+}
+
+export function saveFormSettings(input) {
+	writeGroup(FORM_FIELDS, FORM_PREFIX, input);
 }
 
 const selectTestimonials = db.prepare(

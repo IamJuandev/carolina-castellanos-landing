@@ -170,3 +170,9 @@
 .admin-form input[type="file"] {
 	padding: 9px 12px;
 }
+.admin-speaker {
+	width: 96px;
+	height: 96px;
+	border-radius: 50%;
+	object-fit: cover;
+}

@@ -91,6 +91,43 @@
         </form>
       </section>
 
+      <section class="card light-card admin-card" id="formulario">
+        <p class="section-kicker">Clase gratis</p>
+        <h2 class="admin-subtitle">Formulario de inscripción</h2>
+        <p>Estos datos se muestran en <a class="faq-link" href="/formulario" target="_blank" rel="noreferrer">/formulario</a> y en su página de confirmación. Las inscripciones llegan a las respuestas del Google Form.</p>
+        <p class="admin-notice">{{form_notice}}</p>
+        <p class="admin-errors">{{form_errors}}</p>
+        <form class="admin-form" method="post" action="/cronograma/formulario" enctype="multipart/form-data">
+          <fieldset>
+            <legend>Clase</legend>
+            <label>Título <input name="title" value="{{form_title}}" required /></label>
+            <label>Subtítulo <input name="subtitle" value="{{form_subtitle}}" required /></label>
+          </fieldset>
+          <fieldset>
+            <legend>Fecha y hora</legend>
+            <div class="admin-row">
+              <label>Fecha <input type="date" name="start_date" value="{{form_start_date}}" required /></label>
+              <label>Hora (Colombia) <input type="time" name="start_time" value="{{form_start_time}}" required /></label>
+            </div>
+            <p class="admin-hint">Se mostrará como "{{form_date_label}}" y "{{form_hour_label}}".</p>
+          </fieldset>
+          <fieldset>
+            <legend>Clase impartida por</legend>
+            <div class="admin-row">
+              <label>Nombre <input name="speaker_name" value="{{form_speaker_name}}" required /></label>
+              <label>Cargo <input name="speaker_role" value="{{form_speaker_role}}" required /></label>
+            </div>
+            <img class="admin-speaker" src="{{form_speaker_photo}}" alt="Foto actual del expositor" width="96" height="96" />
+            <label>Cambiar foto del expositor (opcional) <input type="file" name="speaker_photo_file" accept="image/*" /></label>
+          </fieldset>
+          <fieldset>
+            <legend>Confirmación</legend>
+            <label>Enlace del grupo de WhatsApp <input type="url" name="whatsapp_url" value="{{form_whatsapp_url}}" required /></label>
+          </fieldset>
+          <button class="button button-dark" type="submit">Guardar cambios</button>
+        </form>
+      </section>
+
       <section class="card light-card admin-card" id="testimonios">
         <p class="section-kicker">Testimonios</p>
         <h2 class="admin-subtitle">Fotos del carrusel</h2>

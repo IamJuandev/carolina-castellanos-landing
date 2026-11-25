@@ -13,6 +13,9 @@ import {
 	getRelationshipSettings,
 	saveRelationshipSettings,
 	RELATIONSHIP_FIELDS,
+	getFormSettings,
+	saveFormSettings,
+	FORM_FIELDS,
 	getTestimonials,
 	getTestimonial,
 	addTestimonial,
@@ -31,6 +34,17 @@ const SESSION_SECRET = process.env.SESSION_SECRET ?? randomBytes(32).toString("h
 const SESSION_COOKIE = "cronograma_session";
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
 const TIMEZONE = "America/Bogota";
+const SPEAKER_PHOTO_SIZE = 480;
+const GOOGLE_FORM_TIMEOUT_MS = 10_000;
+// Sign-ups are forwarded to this Google Form; its responses sheet is the registry.
+const GOOGLE_FORM_ACTION =
+	process.env.GOOGLE_FORM_ACTION ??
+	"https://docs.google.com/forms/d/e/1FAIpQLSc-NX3pehozvYVw6u5aPyhFFV8Hlyv8SBVrjRVxxfhZWrCaYQ/formResponse";
+const GOOGLE_FORM_ENTRIES = {
+	full_name: "entry.232572871",
+	email: "entry.1304537100",
+	whatsapp: "entry.1821032806",
+};
 const TZ_OFFSET = "-05:00";
 
 if (!ADMIN_PASSWORD) {
@@ -42,6 +56,8 @@ const landingTemplate = readFileSync(join(LANDING_DIR, "index.html"), "utf8");
 const abandonmentLandingTemplate = readFileSync(join(LANDING_DIR, "heridadeabandono", "index.html"), "utf8");
 const masculineEnergyLandingTemplate = readFileSync(join(LANDING_DIR, "energiamasculina", "index.html"), "utf8");
 const relationshipLandingTemplate = readFileSync(join(LANDING_DIR, "relacionesdepareja", "index.html"), "utf8");
+const signupFormTemplate = readFileSync(join(LANDING_DIR, "formulario", "index.html"), "utf8");
+const signupThanksTemplate = readFileSync(join(LANDING_DIR, "formulario", "gracias.html"), "utf8");
 const adminTemplate = readFileSync(join(__dirname, "cronograma.html"), "utf8");
 const loginTemplate = readFileSync(join(__dirname, "login.html"), "utf8");
 const adminCss = readFileSync(join(__dirname, "admin.css"), "utf8");
@@ -56,6 +72,13 @@ const timeFormatter = new Intl.DateTimeFormat("es-CO", {
 	hour: "numeric",
 	minute: "2-digit",
 	hour12: true,
+	timeZone: TIMEZONE,
+});
+
+const weekdayDateFormatter = new Intl.DateTimeFormat("es-CO", {
+	weekday: "long",
+	day: "numeric",
+	month: "long",
 	timeZone: TIMEZONE,
 });
 
@@ -118,6 +141,18 @@ function deriveLabels(settings) {
 		time_label: valid
 			? `${timeFormatter.format(date)} Bogotá`
 			: settings.start_time,
+	};
+}
+
+function deriveFormLabels(settings) {
+	const date = new Date(`${settings.start_date}T${settings.start_time}:00${TZ_OFFSET}`);
+	if (Number.isNaN(date.getTime())) {
+		return { date_label: settings.start_date, hour_label: settings.start_time };
+	}
+	const dateLabel = weekdayDateFormatter.format(date);
+	return {
+		date_label: dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1),
+		hour_label: timeFormatter.format(date),
 	};
 }
 
@@ -184,6 +219,37 @@ function validateRelationship(body) {
 	return errors;
 }
 
+function validateFormSettings(body) {
+	const errors = validate(body, FORM_FIELDS.filter((key) => key !== "speaker_photo"));
+	if (body.whatsapp_url && !/^https:\/\/\S+$/.test(body.whatsapp_url.trim())) {
+		errors.push("El enlace de WhatsApp debe empezar por https://.");
+	}
+	return errors;
+}
+
+function validateSignup(body) {
+	const errors = [];
+	if (!body.full_name) errors.push("Escribe tu nombre completo.");
+	if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) errors.push("Escribe un correo electrónico válido.");
+	if (body.whatsapp.replace(/\D/g, "").length < 7) errors.push("Escribe un número de WhatsApp válido.");
+	if (!body.consent) errors.push("Debes aceptar recibir la información de la clase.");
+	return errors;
+}
+
+async function forwardToGoogleForm(signup) {
+	const payload = new URLSearchParams();
+	for (const [key, entry] of Object.entries(GOOGLE_FORM_ENTRIES)) payload.set(entry, signup[key]);
+	const response = await fetch(GOOGLE_FORM_ACTION, {
+		method: "POST",
+		body: payload,
+		redirect: "manual",
+		signal: AbortSignal.timeout(GOOGLE_FORM_TIMEOUT_MS),
+	});
+	if (response.status >= 400) {
+		throw new Error(`Google Form responded ${response.status}`);
+	}
+}
+
 function prefixKeys(values, prefix) {
 	return Object.fromEntries(Object.entries(values).map(([key, value]) => [prefix + key, value]));
 }
@@ -201,6 +267,7 @@ app.use((req, res, next) => {
 });
 
 mkdirSync(join(UPLOADS_DIR, "testimonios"), { recursive: true });
+mkdirSync(join(UPLOADS_DIR, "formulario"), { recursive: true });
 const upload = multer({
 	storage: multer.memoryStorage(),
 	limits: { fileSize: UPLOAD_MAX_BYTES, files: 1 },
@@ -210,6 +277,7 @@ const upload = multer({
 function renderAdmin(res, status, values) {
 	const settings = getSettings();
 	const relationship = getRelationshipSettings();
+	const signupForm = getFormSettings();
 	res.status(status).type("html").send(
 		render(adminTemplate, {
 			...settings,
@@ -217,6 +285,9 @@ function renderAdmin(res, status, values) {
 			...prefixKeys({ ...relationship, ...deriveLabels(relationship) }, "rel_"),
 			rel_notice: "",
 			rel_errors: "",
+			...prefixKeys({ ...signupForm, ...deriveFormLabels(signupForm) }, "form_"),
+			form_notice: "",
+			form_errors: "",
 			testimonials_admin: renderAdminTestimonials(getTestimonials()),
 			notice: "",
 			errors: "",
@@ -261,6 +332,58 @@ app.get("/relacionesdepareja", (_req, res) => {
 			...deriveLabels(settings),
 		}),
 	);
+});
+
+app.use("/formulario", express.static(join(LANDING_DIR, "formulario"), { index: false, redirect: false, maxAge: "7d" }));
+
+function renderSignupForm(res, status, values) {
+	const settings = getFormSettings();
+	res.status(status).type("html").send(
+		render(signupFormTemplate, {
+			...settings,
+			...deriveFormLabels(settings),
+			errors: "",
+			full_name: "",
+			email: "",
+			whatsapp: "",
+			...values,
+		}),
+	);
+}
+
+app.get("/formulario", (_req, res) => {
+	renderSignupForm(res, 200, {});
+});
+
+app.post("/formulario", async (req, res) => {
+	const signup = {
+		full_name: String(req.body.full_name ?? "").trim().slice(0, 120),
+		email: String(req.body.email ?? "").trim().slice(0, 160),
+		whatsapp: String(req.body.whatsapp ?? "").trim().slice(0, 30),
+		consent: req.body.consent === "yes",
+	};
+	// Honeypot: bots fill the hidden field; pretend success without forwarding.
+	if (String(req.body.website ?? "").trim()) {
+		return res.redirect(303, "/formulario/gracias");
+	}
+	const errors = validateSignup(signup);
+	if (errors.length) {
+		return renderSignupForm(res, 400, { ...signup, errors: errors.join(" ") });
+	}
+	try {
+		await forwardToGoogleForm(signup);
+	} catch (error) {
+		console.error("signup forward failed", error);
+		return renderSignupForm(res, 502, {
+			...signup,
+			errors: "No pudimos registrar tu inscripción. Intenta de nuevo en unos minutos.",
+		});
+	}
+	res.redirect(303, "/formulario/gracias");
+});
+
+app.get("/formulario/gracias", (_req, res) => {
+	res.type("html").send(render(signupThanksTemplate, getFormSettings()));
 });
 
 app.get("/eneagrama", (_req, res) => {
@@ -328,10 +451,15 @@ const RELATIONSHIP_NOTICES = {
 	relationship_saved: "Cambios guardados.",
 };
 
+const FORM_NOTICES = {
+	form_saved: "Cambios guardados.",
+};
+
 app.get("/cronograma", requireAuth, (req, res) => {
 	renderAdmin(res, 200, {
 		notice: NOTICES[req.query.ok] ?? "",
 		rel_notice: RELATIONSHIP_NOTICES[req.query.ok] ?? "",
+		form_notice: FORM_NOTICES[req.query.ok] ?? "",
 	});
 });
 
@@ -346,6 +474,41 @@ app.post("/cronograma/relaciones", requireAuth, (req, res) => {
 	}
 	saveRelationshipSettings(req.body);
 	res.redirect(303, "/cronograma?ok=relationship_saved#relaciones");
+});
+
+app.post("/cronograma/formulario", requireAuth, (req, res) => {
+	upload.single("speaker_photo_file")(req, res, async (uploadError) => {
+		const current = getFormSettings();
+		const draft = Object.fromEntries(FORM_FIELDS.map((key) => [key, req.body?.[key] ?? ""]));
+		draft.speaker_photo = current.speaker_photo;
+		const fail = (status, message) =>
+			renderAdmin(res, status, {
+				...prefixKeys({ ...draft, ...deriveFormLabels(draft) }, "form_"),
+				form_errors: message,
+			});
+		if (uploadError) return fail(400, "No se pudo subir la foto (máximo 15 MB).");
+		const errors = validateFormSettings(draft);
+		if (errors.length) return fail(400, errors.join(" "));
+		if (req.file) {
+			try {
+				const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
+				await sharp(req.file.buffer)
+					.rotate()
+					.resize({ width: SPEAKER_PHOTO_SIZE, height: SPEAKER_PHOTO_SIZE, fit: "cover", withoutEnlargement: true })
+					.webp({ quality: 82 })
+					.toFile(join(UPLOADS_DIR, "formulario", filename));
+				draft.speaker_photo = `${UPLOADS_URL}/formulario/${filename}`;
+			} catch (error) {
+				console.error("speaker photo upload failed", error);
+				return fail(500, "La foto no se pudo procesar. Intenta con otro archivo.");
+			}
+		}
+		saveFormSettings(draft);
+		if (req.file && current.speaker_photo.startsWith(`${UPLOADS_URL}/formulario/`)) {
+			await unlink(join(UPLOADS_DIR, current.speaker_photo.slice(UPLOADS_URL.length + 1))).catch(() => {});
+		}
+		res.redirect(303, "/cronograma?ok=form_saved#formulario");
+	});
 });
 
 app.post("/cronograma/testimonios", requireAuth, (req, res) => {
