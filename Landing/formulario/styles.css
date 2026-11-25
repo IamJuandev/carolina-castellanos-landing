@@ -269,6 +269,21 @@ h2 {
 	font-size: 0.95rem;
 	outline: none;
 }
+.field select {
+	max-width: 7.2rem;
+	min-height: 46px;
+	padding: 0 4px 0 12px;
+	border: 0;
+	border-left: 1px solid var(--line);
+	color: var(--ink);
+	background: transparent;
+	font: inherit;
+	font-size: 0.9rem;
+	outline: none;
+}
+.field select + input {
+	padding-left: 8px;
+}
 .hp {
 	position: absolute;
 	left: -9999px;

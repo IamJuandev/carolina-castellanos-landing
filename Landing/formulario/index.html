@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/formulario/styles.css?v=1" />
+    <link rel="stylesheet" href="/formulario/styles.css?v=2" />
   </head>
   <body>
     <svg width="0" height="0" class="sprite" aria-hidden="true" focusable="false">
@@ -73,8 +73,12 @@
           </label>
           <label class="field">
             <svg class="icon" aria-hidden="true"><use href="#i-whatsapp" /></svg>
-            <span class="sr-only">WhatsApp</span>
-            <input type="tel" name="whatsapp" value="{{whatsapp}}" placeholder="WhatsApp" autocomplete="tel" inputmode="tel" maxlength="30" required />
+            <span class="sr-only">Número de WhatsApp</span>
+            <span class="sr-only">Indicativo del país</span>
+            <select name="country_code" aria-label="Indicativo del país">
+{{{country_options}}}
+            </select>
+            <input type="tel" name="whatsapp" value="{{whatsapp}}" placeholder="WhatsApp" autocomplete="tel-national" inputmode="tel" maxlength="30" required />
           </label>
           <label class="hp" aria-hidden="true">Sitio web <input name="website" tabindex="-1" autocomplete="off" /></label>
           <label class="consent">

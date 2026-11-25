@@ -82,6 +82,39 @@ const weekdayDateFormatter = new Intl.DateTimeFormat("es-CO", {
 	timeZone: TIMEZONE,
 });
 
+// Dial codes offered on the sign-up form; the first one is the default.
+const COUNTRY_CODES = [
+	["+57", "Colombia"],
+	["+52", "México"],
+	["+54", "Argentina"],
+	["+591", "Bolivia"],
+	["+56", "Chile"],
+	["+506", "Costa Rica"],
+	["+53", "Cuba"],
+	["+593", "Ecuador"],
+	["+503", "El Salvador"],
+	["+34", "España"],
+	["+1", "Estados Unidos / Canadá"],
+	["+502", "Guatemala"],
+	["+504", "Honduras"],
+	["+505", "Nicaragua"],
+	["+507", "Panamá"],
+	["+595", "Paraguay"],
+	["+51", "Perú"],
+	["+1787", "Puerto Rico"],
+	["+1809", "República Dominicana"],
+	["+598", "Uruguay"],
+	["+58", "Venezuela"],
+];
+const COUNTRY_CODE_SET = new Set(COUNTRY_CODES.map(([code]) => code));
+
+function renderCountryOptions(selected) {
+	return COUNTRY_CODES.map(
+		([code, name]) =>
+			`              <option value="${code}"${code === selected ? " selected" : ""}>${escapeHtml(name)} (${code})</option>`,
+	).join("\n");
+}
+
 function escapeHtml(value) {
 	return String(value)
 		.replaceAll("&", "&amp;")
@@ -231,14 +264,16 @@ function validateSignup(body) {
 	const errors = [];
 	if (!body.full_name) errors.push("Escribe tu nombre completo.");
 	if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) errors.push("Escribe un correo electrónico válido.");
-	if (body.whatsapp.replace(/\D/g, "").length < 7) errors.push("Escribe un número de WhatsApp válido.");
+	if (!COUNTRY_CODE_SET.has(body.country_code)) errors.push("Selecciona el indicativo de tu país.");
+	if (body.whatsapp.replace(/\D/g, "").length < 6) errors.push("Escribe un número de WhatsApp válido.");
 	if (!body.consent) errors.push("Debes aceptar recibir la información de la clase.");
 	return errors;
 }
 
 async function forwardToGoogleForm(signup) {
 	const payload = new URLSearchParams();
-	for (const [key, entry] of Object.entries(GOOGLE_FORM_ENTRIES)) payload.set(entry, signup[key]);
+	const values = { ...signup, whatsapp: `${signup.country_code} ${signup.whatsapp}` };
+	for (const [key, entry] of Object.entries(GOOGLE_FORM_ENTRIES)) payload.set(entry, values[key]);
 	const response = await fetch(GOOGLE_FORM_ACTION, {
 		method: "POST",
 		body: payload,
@@ -347,6 +382,7 @@ function renderSignupForm(res, status, values) {
 			email: "",
 			whatsapp: "",
 			...values,
+			country_options: renderCountryOptions(values.country_code ?? COUNTRY_CODES[0][0]),
 		}),
 	);
 }
@@ -359,6 +395,7 @@ app.post("/formulario", async (req, res) => {
 	const signup = {
 		full_name: String(req.body.full_name ?? "").trim().slice(0, 120),
 		email: String(req.body.email ?? "").trim().slice(0, 160),
+		country_code: String(req.body.country_code ?? "").trim(),
 		whatsapp: String(req.body.whatsapp ?? "").trim().slice(0, 30),
 		consent: req.body.consent === "yes",
 	};
